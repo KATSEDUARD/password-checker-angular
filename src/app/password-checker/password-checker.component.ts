@@ -18,6 +18,15 @@ export class PasswordCheckerComponent {
 
     let score = 0;
 
+    const onlyLetters = /^[a-zA-Z]+$/;
+    const onlyDigits = /^\d+$/;
+    const onlySymbols = /^[\W_]+$/;
+
+    const allIncluded = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/;
+    const mixedLettersNumbers = /^[a-zA-Z0-9]+$/;
+    const mixedLettersSymbols = /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+    const mixedNumbersSymbols = /^[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?\d]+$/;
+
     if(password.length === 0) {
       score = 0;
     }
@@ -25,13 +34,13 @@ export class PasswordCheckerComponent {
       if (password.length < 8 && password.length > 0) {
         score = 25;
       } else {
-        if (/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/.test(password)) {
+        if (allIncluded.test(password)) {
           score = 100;
-        } else if (/^[a-zA-Z]+$/.test(password) || /^\d+$/.test(password) || /^[\W_]+$/.test(password)) {
+        } else if (onlyLetters.test(password) || onlyDigits.test(password) || onlySymbols.test(password)) {
           score = 50;
-        } else if (/^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(password) || 
-        /^[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?\d]+$/.test(password) || 
-        /^[a-zA-Z0-9]+$/.test(password)) {
+        } else if (mixedLettersSymbols.test(password) || 
+        mixedNumbersSymbols.test(password) || 
+        mixedLettersNumbers.test(password)) {
           score = 75;
         } else {
           score = 0;
